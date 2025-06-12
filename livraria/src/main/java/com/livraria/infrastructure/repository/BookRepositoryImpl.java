@@ -3,9 +3,10 @@ package com.livraria.infrastructure.repository;
 import com.livraria.domain.model.Book;
 import com.livraria.domain.ports.BookRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -15,8 +16,8 @@ public class BookRepositoryImpl implements BookRepositoryPort {
     private final BookJpaRepository jpaRepository;
 
     @Override
-    public List<Book> findAll() {
-        return jpaRepository.findAll();
+    public Page<Book> findAll(Pageable pageable) {
+        return jpaRepository.findAll(pageable);
     }
 
     @Override
@@ -25,13 +26,13 @@ public class BookRepositoryImpl implements BookRepositoryPort {
     }
 
     @Override
-    public List<Book> findByAuthor(String author) {
-        return jpaRepository.findByAuthorIgnoreCaseContaining(author);
+    public Page<Book> findByAuthor(String author, Pageable pageable) {
+        return jpaRepository.findByAuthorIgnoreCaseContaining(author, pageable);
     }
 
     @Override
-    public List<Book> findByGenre(String genre) {
-        return jpaRepository.findByGenreIgnoreCaseContaining(genre);
+    public Page<Book> findByGenre(String genre, Pageable pageable) {
+        return jpaRepository.findByGenreIgnoreCaseContaining(genre, pageable);
     }
 
     @Override

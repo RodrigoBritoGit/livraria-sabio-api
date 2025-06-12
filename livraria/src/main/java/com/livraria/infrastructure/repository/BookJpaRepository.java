@@ -1,12 +1,12 @@
 package com.livraria.infrastructure.repository;
 
 import com.livraria.domain.model.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface BookJpaRepository extends JpaRepository<Book, Long> {
-    List<Book> findByAuthorIgnoreCaseContaining(String author);
+    Page<Book> findByAuthorIgnoreCaseContaining(String author, Pageable pageable);
 
-    List<Book> findByGenreIgnoreCaseContaining(String genre);
+    Page<Book> findByGenreIgnoreCaseContaining(String genre, Pageable pageable);
 }
