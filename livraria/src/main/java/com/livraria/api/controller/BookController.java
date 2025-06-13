@@ -12,6 +12,7 @@ import com.livraria.application.dto.BookDTO;
 import com.livraria.application.dto.PageResponseDTO;
 import com.livraria.application.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -31,7 +32,9 @@ public class BookController {
 
     @Operation(summary = "Retorna livros com paginação")
     @GetMapping
-    public ResponseEntity<PageResponseDTO<BookDTO>> getAllBooks(Pageable pageable) {
+    public ResponseEntity<PageResponseDTO<BookDTO>> getAllBooks(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(hidden = true) Pageable pageable) {
         return ResponseEntity.ok(bookService.findAll(pageable));
     }
 
@@ -78,13 +81,19 @@ public class BookController {
 
     @Operation(summary = "Retorna livros por gênero com paginação")
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<PageResponseDTO<BookDTO>> getBooksByGenre(@PathVariable String genre, Pageable pageable) {
+    public ResponseEntity<PageResponseDTO<BookDTO>> getBooksByGenre(@PathVariable String genre,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(hidden = true) Pageable pageable) {
         return ResponseEntity.ok(bookService.findByGenre(genre, pageable));
     }
 
     @Operation(summary = "Retorna livros por autor com paginação")
     @GetMapping("/author/{author}")
-    public ResponseEntity<PageResponseDTO<BookDTO>> getBooksByAuthor(@PathVariable String author, Pageable pageable) {
+    public ResponseEntity<PageResponseDTO<BookDTO>> getBooksByAuthor(@PathVariable String author,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(hidden = true) Pageable pageable) {
         return ResponseEntity.ok(bookService.findByAuthor(author, pageable));
     }
 

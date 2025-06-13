@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
@@ -44,25 +45,6 @@ class BookControllerTest {
     void setup() {
         MockitoAnnotations.openMocks(this);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    @Test
-    void testGetAllBooks() {
-        Pageable pageable = PageRequest.of(0, 10);
-        List<BookDTO> content = List.of(new BookDTO());
-        PageResponseDTO<BookDTO> mockPage = new PageResponseDTO<>(
-                content,
-                0, // pageNumber
-                10, // pageSize
-                1L, // totalElements
-                1, // totalPages
-                true // last
-        );
-        when(bookService.findAll(pageable)).thenReturn(mockPage);
-
-        ResponseEntity<PageResponseDTO<BookDTO>> response = bookController.getAllBooks(pageable);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(mockPage, response.getBody());
     }
 
     @Test
@@ -102,44 +84,70 @@ class BookControllerTest {
     }
 
     @Test
-    void testGetBooksByGenre() {
-        String genre = "Ficção";
-        Pageable pageable = PageRequest.of(0, 10);
+    void testGetAllBooks() {
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
         List<BookDTO> content = List.of(new BookDTO());
-        PageResponseDTO<BookDTO> page = new PageResponseDTO<>(
+        PageResponseDTO<BookDTO> mockPage = new PageResponseDTO<>(
                 content,
-                0, // pageNumber
-                10, // pageSize
+                page,
+                size,
                 1L, // totalElements
                 1, // totalPages
                 true // last
         );
 
-        when(bookService.findByGenre(genre, pageable)).thenReturn(page);
-        ResponseEntity<PageResponseDTO<BookDTO>> response = bookController.getBooksByGenre(genre, pageable);
+        when(bookService.findAll(any(Pageable.class))).thenReturn(mockPage);
+
+        ResponseEntity<PageResponseDTO<BookDTO>> response = bookController.getAllBooks(page, size, pageable);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockPage, response.getBody());
+    }
+
+    @Test
+    void testGetBooksByGenre() {
+        String genre = "Ficção";
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+        List<BookDTO> content = List.of(new BookDTO());
+        PageResponseDTO<BookDTO> pageResponse = new PageResponseDTO<>(
+                content,
+                page,
+                size,
+                1L,
+                1,
+                true);
+
+        when(bookService.findByGenre(eq(genre), any(Pageable.class))).thenReturn(pageResponse);
+        ResponseEntity<PageResponseDTO<BookDTO>> response = bookController.getBooksByGenre(genre, page, size, pageable);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(page, response.getBody());
+        assertEquals(pageResponse, response.getBody());
     }
 
     @Test
     void testGetBooksByAuthor() {
         String author = "Machado de Assis";
-        Pageable pageable = PageRequest.of(0, 10);
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
         List<BookDTO> content = List.of(new BookDTO());
-        PageResponseDTO<BookDTO> page = new PageResponseDTO<>(
+        PageResponseDTO<BookDTO> pageResponse = new PageResponseDTO<>(
                 content,
-                0, // pageNumber
-                10, // pageSize
-                1L, // totalElements
-                1, // totalPages
-                true // last
-        );
+                page,
+                size,
+                1L,
+                1,
+                true);
 
-        when(bookService.findByAuthor(author, pageable)).thenReturn(page);
-        ResponseEntity<PageResponseDTO<BookDTO>> response = bookController.getBooksByAuthor(author, pageable);
+        when(bookService.findByAuthor(eq(author), any(Pageable.class))).thenReturn(pageResponse);
+        ResponseEntity<PageResponseDTO<BookDTO>> response = bookController.getBooksByAuthor(author, page, size,
+                pageable);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(page, response.getBody());
+        assertEquals(pageResponse, response.getBody());
     }
+
 }
