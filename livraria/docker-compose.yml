@@ -18,7 +18,9 @@ services:
       - "6379:6379"
 
   app:
-    build: .
+    build:
+      context: .
+      target: run
     ports:
       - "8080:8080"
     depends_on:
@@ -30,6 +32,17 @@ services:
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
+  
+  tests:
+    build:
+      context: .
+      target: test
+    depends_on:
+      - db
+      - redis
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    command: ["./mvnw", "test"]
 
 volumes:
   postgres-data:

@@ -16,6 +16,11 @@ public class BookRepositoryImpl implements BookRepositoryPort {
     private final BookJpaRepository jpaRepository;
 
     @Override
+    public long count() {
+        return jpaRepository.count();
+    }
+
+    @Override
     public Page<Book> findAll(Pageable pageable) {
         return jpaRepository.findAll(pageable);
     }

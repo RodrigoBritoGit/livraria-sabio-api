@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface BookRepositoryPort {
+    long count();
+    
     Page<Book> findAll(Pageable pageable);
 
     Optional<Book> findById(Long id);

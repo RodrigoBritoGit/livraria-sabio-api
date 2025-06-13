@@ -12,7 +12,6 @@ import com.livraria.application.dto.BookDTO;
 import com.livraria.application.dto.PageResponseDTO;
 import com.livraria.application.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -89,10 +88,14 @@ public class BookController {
         return ResponseEntity.ok(bookService.findByAuthor(author, pageable));
     }
 
-    @Operation(summary = "Salva um novo livro")
-    @PostMapping
-    public ResponseEntity<BookDTO> saveBook(@Valid @RequestBody BookDTO bookDTO) {
-        BookDTO savedBook = bookService.save(bookDTO);
-        return ResponseEntity.status(201).body(savedBook);
-    }
+    /*
+     * @Operation(summary = "Salva um novo livro")
+     * 
+     * @PostMapping
+     * public ResponseEntity<BookDTO> saveBook(@Valid @RequestBody BookDTO bookDTO)
+     * {
+     * BookDTO savedBook = bookService.save(bookDTO);
+     * return ResponseEntity.status(201).body(savedBook);
+     * }
+     */
 }
