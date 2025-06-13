@@ -1,6 +1,6 @@
 # 📚 O Catálogo do Sábio - API RESTful
 
-API desenvolvida como parte de um **desafio técnico para desenvolvedor java pleno**, simulando uma livraria online com funcionalidades avançadas: autenticação JWT, paginação, filtros, visualização recente de livros, cache com Redis, arquitetura limpa, testes unitários e automatizados.
+API desenvolvida como parte de um **desafio técnico para desenvolvedor java pleno**, simulando uma livraria online com funcionalidades avançadas: autenticação JWT, paginação, filtros, livros visualizados recentemente, cache com Redis, arquitetura limpa, testes unitários e automatizados.
 
 ---
 
@@ -68,7 +68,7 @@ Essa estrutura facilita a escalabilidade e a substituição de implementações 
   - `db`: banco PostgreSQL.
   - `redis`: cache Redis.
   - `tests`: container separado que executa testes automatizados com profile `test` (desabilita segurança para executar separadamente os testes).
-- Comando para subir tudo:
+- Comando para subir todos:
   ```bash
   docker-compose up --build
   ```
@@ -133,12 +133,6 @@ A documentação interativa está disponível via Swagger:
 
 ---
 
-## 🏁 Conclusão
-
-Este projeto demonstra a aplicação sólida de boas práticas em desenvolvimento Java com Spring Boot, incluindo arquitetura limpa, segurança robusta via JWT, caching eficiente com Redis, testes automatizados e deploy containerizado. A solução é escalável, segura e de fácil manutenção, atendendo com excelência ao desafio técnico proposto.
-
----
-
 ## 📋 Requisitos
 
 Antes de executar a aplicação, certifique-se de que o ambiente possua as seguintes ferramentas instaladas e configuradas:
@@ -156,17 +150,28 @@ Antes de executar a aplicação, certifique-se de que o ambiente possua as segui
 
 1. Clone o repositório:
   ```bash
-    git clone https://github.com/RodrigoBritoGit/livraria-sabio-api.git
+  git clone https://github.com/RodrigoBritoGit/livraria-sabio-api.git
   ```
+  Confirme se está no diretório correto:
+  ```bash
+  cd livraria-sabio-api/livraria
+  ```
+
 2. Execute o comando para subir a aplicação com Docker Compose:
   ```bash
-    docker-compose up --build
+  docker-compose up --build
   ```
 3. Acesse
   ```bash
-    http://localhost:8080
+  http://localhost:8080
   ```
 4. Utilize Swagger, Insomnia ou Postman para explorar a API e testar os endpoints
+
+---
+
+## 🏁 Conclusão
+
+Este projeto demonstra a aplicação sólida de boas práticas em desenvolvimento Java com Spring Boot, incluindo arquitetura limpa, segurança robusta via JWT, caching eficiente com Redis, testes automatizados e deploy containerizado. A solução é escalável, segura e de fácil manutenção, atendendo com excelência ao desafio técnico proposto.
 
 ---
 
