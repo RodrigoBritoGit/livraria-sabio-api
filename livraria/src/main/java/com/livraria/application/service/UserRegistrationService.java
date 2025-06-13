@@ -33,7 +33,7 @@ public class UserRegistrationService {
         // Salva o usuário no banco de dados
         Usuario savedUsuario = userRepository.save(usuario);
 
-        // Retorna resposta contendo apenas id e username (sem roles)
+        // Retorna resposta contendo apenas id e username
         return new UserResponseDTO(savedUsuario.getId(), savedUsuario.getUsername());
     }
 }

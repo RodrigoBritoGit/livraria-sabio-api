@@ -29,9 +29,8 @@ public class BookService {
 
     @Cacheable(value = "books", key = "#id")
     public BookDTO findById(Long id) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id " + id));
-        return modelMapper.map(book, BookDTO.class);
+        Book book = getEntityById(id);
+        return convertToDTO(book);
     }
 
     @Cacheable(value = "booksByAuthor", key = "#author + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
@@ -48,14 +47,33 @@ public class BookService {
 
     @CacheEvict(value = { "books", "booksByAuthor", "booksByGenre" }, allEntries = true)
     public BookDTO save(BookDTO bookDTO) {
-        Book book = modelMapper.map(bookDTO, Book.class);
+        Book book = convertToEntity(bookDTO);
         Book saved = bookRepository.save(book);
-        return modelMapper.map(saved, BookDTO.class);
+        return convertToDTO(saved);
     }
 
+    // Método para buscar a entidade por id, lançando exceção se não existir
+    public Book getEntityById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id " + id));
+    }
+
+    // Centraliza conversão da entidade para DTO
+    public BookDTO convertToDTO(Book book) {
+        return modelMapper.map(book, BookDTO.class);
+    }
+
+    // Centraliza conversão do DTO para entidade
+    public Book convertToEntity(BookDTO bookDTO) {
+        return modelMapper.map(bookDTO, Book.class);
+    }
+
+    // Converte a página de entidades para resposta paginada de DTOs
     private PageResponseDTO<BookDTO> mapToPageResponse(Page<Book> page) {
         return new PageResponseDTO<>(
-                page.getContent().stream().map(b -> modelMapper.map(b, BookDTO.class)).collect(Collectors.toList()),
+                page.getContent().stream()
+                        .map(this::convertToDTO)
+                        .collect(Collectors.toList()),
                 page.getNumber(),
                 page.getSize(),
                 page.getTotalElements(),

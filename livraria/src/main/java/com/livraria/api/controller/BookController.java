@@ -1,11 +1,22 @@
 package com.livraria.api.controller;
 
+import com.livraria.domain.model.Usuario;
+import com.livraria.infrastructure.repository.UserRepository;
+import com.livraria.application.service.RecentlyViewedBookService;
+import com.livraria.domain.model.Book;
+import com.livraria.domain.model.RecentlyViewedBook;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import com.livraria.application.dto.BookDTO;
 import com.livraria.application.dto.PageResponseDTO;
 import com.livraria.application.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private final BookService bookService;
+    private final RecentlyViewedBookService recentlyViewedBookService;
+    private final UserRepository userRepository;
 
     @Operation(summary = "Retorna livros com paginação")
     @GetMapping
@@ -26,7 +39,42 @@ public class BookController {
     @Operation(summary = "Retorna um livro pelo ID")
     @GetMapping("/{id}")
     public ResponseEntity<BookDTO> getBookById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookService.findById(id));
+        BookDTO bookDTO = bookService.findById(id);
+
+        // Obter usuário logado
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getName())) {
+            Usuario user = userRepository.findByUsername(auth.getName())
+                    .orElse(null);
+
+            if (user != null) {
+                // Obter a entidade Book para salvar no histórico
+                Book bookEntity = bookService.getEntityById(id);
+                recentlyViewedBookService.saveView(user, bookEntity);
+            }
+        }
+
+        return ResponseEntity.ok(bookDTO);
+    }
+
+    @Operation(summary = "Retorna livros visualizados recentemente")
+    @GetMapping("/recently-viewed")
+    public ResponseEntity<List<BookDTO>> getRecentlyViewedBooks() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Usuario user = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        List<RecentlyViewedBook> recentlyViewed = recentlyViewedBookService.getRecentlyViewedBooks(user);
+
+        List<BookDTO> books = recentlyViewed.stream()
+                .map(rv -> bookService.convertToDTO(rv.getBook()))
+                .toList();
+
+        return ResponseEntity.ok(books);
     }
 
     @Operation(summary = "Retorna livros por gênero com paginação")
