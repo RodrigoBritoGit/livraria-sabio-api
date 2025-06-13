@@ -107,9 +107,9 @@ Essa estrutura facilita a escalabilidade e a substituição de implementações 
 ## 📑 Documentação e Endpoints
 
 A documentação interativa está disponível via Swagger:
-
-[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
+```bash
+  http://localhost:8080/swagger-ui.html
+```
 ---
 
 ### Autenticação
@@ -155,11 +155,10 @@ Antes de executar a aplicação, certifique-se de que o ambiente possua as segui
 ## 🐳 Como rodar
 
 1. Clone o repositório:
-   ```bash
+  ```bash
     git clone https://github.com/RodrigoBritoGit/livraria-sabio-api.git
   ```
 2. Execute o comando para subir a aplicação com Docker Compose:
-
   ```bash
     docker-compose up --build
   ```
@@ -173,12 +172,12 @@ Antes de executar a aplicação, certifique-se de que o ambiente possua as segui
 
 ## 👤 Autor
 
-**\[Rodrigo dos santos brito]**
-📧 \[[rodrigodossantosbrito@hotmail.com](mailto:rodrigodossantosbrito@hotmail.com)]
-🔗 GitHub: \[[https://github.com/RodrigoBritoGit](https://github.com/RodrigoBritoGit)]
-🔗 LinkedIn: \[[https://www.linkedin.com/in/rodrigo-brito-19bb54136/](https://www.linkedin.com/in/rodrigo-brito-19bb54136/)]
+**Rodrigo dos Santos Brito**  
+📧 [rodrigodossantosbrito@hotmail.com](mailto:rodrigodossantosbrito@hotmail.com)  
+🔗 GitHub: [https://github.com/RodrigoBritoGit](https://github.com/RodrigoBritoGit)  
+🔗 LinkedIn: [https://www.linkedin.com/in/rodrigo-brito-19bb54136/](https://www.linkedin.com/in/rodrigo-brito-19bb54136/)
 
 Qualquer dúvida, estou à disposição!
 
----
+
 
