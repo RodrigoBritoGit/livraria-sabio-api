@@ -25,6 +25,11 @@ spring:
 server:
   port: 8080
 
+app:
+  jwt:
+    secret: "SUA_CHAVE_SECRETA_MUITO_LONGA"
+    expiration: 3600000
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
